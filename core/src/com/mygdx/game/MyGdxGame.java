@@ -27,7 +27,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     private Vector2 robotPos = new Vector2(0, 0);
 
     private Random random;
-    private Sprite VincentAtanasov;
+    private Sprite KevinJohnston;
 
     private Texture explosionSheet;
     private TextureRegion[] explosionFrames;
