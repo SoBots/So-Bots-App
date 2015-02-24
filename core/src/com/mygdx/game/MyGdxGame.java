@@ -25,8 +25,8 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     private Sprite robotSprite;
     private Texture robotTexture;
     private Vector2 robotPos = new Vector2(0, 0);
-    private int x=20;
-    private int y=40;
+    private float x=20;
+    private float y=40;
     boolean reverseH = false;
     boolean reverseV = false;
 
@@ -80,36 +80,9 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         font.draw(batch, "Score: " + score, scoreLoc.x, scoreLoc.y);
 
         spawnTimer += Gdx.graphics.getDeltaTime();
-        if(spawnTimer > 0.04f) {
+        if(spawnTimer > 2f) {
             getRobotLoc();
             spawnTimer = 0f;
-
-            if (x>Gdx.graphics.getWidth()) {
-                reverseH = true;
-            }
-            if (y>Gdx.graphics.getHeight()) {
-                reverseV = true;
-            }
-            if (x<0) {
-                reverseH = false;
-            }
-            if (y<0) {
-                reverseV = false;
-            }
-
-            if (reverseH) {
-                x-=5;
-            }
-            else {
-                x+=5;
-            }
-
-            if (reverseV) {
-                y-=10;
-            }
-            else {
-                y+=10;
-            }
 
         }
 
@@ -159,14 +132,15 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     }
 
     public void getRobotLoc(){
-        /*float minX = robotSprite.getWidth();
+        float minX = robotSprite.getWidth();
         float maxX = Gdx.graphics.getWidth()-robotSprite.getWidth();
         float minY = robotSprite.getHeight();
         float maxY = Gdx.graphics.getHeight()-robotSprite.getHeight();
-        robotPos = new Vector2(random.nextFloat() * (maxX-minX) + minX, random.nextFloat() * (maxY - minY) + minY);*/
+        x=random.nextFloat() * (maxX-minX) + minX;
+        y=random.nextFloat() * (maxY - minY) + minY;
+        robotPos = new Vector2(x, y);
 
-        robotPos = new Vector2(x,y);
-        //Gdx.app.log("coOrds", "X - " + robotPos.x + "\n Y - " + robotPos.y);
+        Gdx.app.log("coOrds", "X - " + robotPos.x + "\n Y - " + robotPos.y);
     }
 
 
