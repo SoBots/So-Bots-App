@@ -170,6 +170,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         touchCoordinateX = screenX;
         touchCoordinateY = screenY;
         stateTime = 0;
+        //Click within distance.
         if (Math.abs(touchCoordinateX-(x+30))<=100 && Math.abs(touchCoordinateY-(y+30))<=100) {
             explosionHappening = true;
             Gdx.app.log("expl", "X - " + explosionHappening);
