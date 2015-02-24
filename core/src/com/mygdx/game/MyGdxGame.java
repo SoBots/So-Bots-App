@@ -25,6 +25,10 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     private Sprite robotSprite;
     private Texture robotTexture;
     private Vector2 robotPos = new Vector2(0, 0);
+    private int x=20;
+    private int y=40;
+    boolean reverseH = false;
+    boolean reverseV = false;
 
     private Random random;
     private Sprite SamRowlands;
@@ -76,9 +80,37 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         font.draw(batch, "Score: " + score, scoreLoc.x, scoreLoc.y);
 
         spawnTimer += Gdx.graphics.getDeltaTime();
-        if(spawnTimer > 2f) {
+        if(spawnTimer > 0.04f) {
             getRobotLoc();
             spawnTimer = 0f;
+
+            if (x>Gdx.graphics.getWidth()) {
+                reverseH = true;
+            }
+            if (y>Gdx.graphics.getHeight()) {
+                reverseV = true;
+            }
+            if (x<0) {
+                reverseH = false;
+            }
+            if (y<0) {
+                reverseV = false;
+            }
+
+            if (reverseH) {
+                x-=5;
+            }
+            else {
+                x+=5;
+            }
+
+            if (reverseV) {
+                y-=10;
+            }
+            else {
+                y+=10;
+            }
+
         }
 
         spawnRobot();
@@ -127,13 +159,16 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     }
 
     public void getRobotLoc(){
-        float minX = robotSprite.getWidth();
+        /*float minX = robotSprite.getWidth();
         float maxX = Gdx.graphics.getWidth()-robotSprite.getWidth();
         float minY = robotSprite.getHeight();
         float maxY = Gdx.graphics.getHeight()-robotSprite.getHeight();
-        robotPos = new Vector2(random.nextFloat() * (maxX-minX) + minX, random.nextFloat() * (maxY - minY) + minY);
-        Gdx.app.log("coOrds", "X - " + robotPos.x + "\n Y - " + robotPos.y);
+        robotPos = new Vector2(random.nextFloat() * (maxX-minX) + minX, random.nextFloat() * (maxY - minY) + minY);*/
+
+        robotPos = new Vector2(x,y);
+        //Gdx.app.log("coOrds", "X - " + robotPos.x + "\n Y - " + robotPos.y);
     }
+
 
     public void spawnRobot(){
         camera.unproject(touchPoint.set(robotPos.x, robotPos.y, 0));
@@ -161,7 +196,12 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         touchCoordinateX = screenX;
         touchCoordinateY = screenY;
         stateTime = 0;
-        explosionHappening = true;
+        if (Math.abs(touchCoordinateX-x)<=100 && Math.abs(touchCoordinateY-y)<=100) {
+            explosionHappening = true;
+            Gdx.app.log("expl", "X - " + explosionHappening);
+
+        }
+        else explosionHappening = false;
         return true;
     }
 
