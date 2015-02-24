@@ -69,7 +69,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(255, 255, 255, 255);
+		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
@@ -171,7 +171,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         touchCoordinateY = screenY;
         stateTime = 0;
         //Click within distance.
-        if (Math.abs(touchCoordinateX-(x+30))<=100 && Math.abs(touchCoordinateY-(y+30))<=100) {
+        if (Math.abs(touchCoordinateX-(x+(robotSprite.getWidth()/2)))<=100 && Math.abs(touchCoordinateY-(y+(robotSprite.getHeight()/2)))<=100) {
             explosionHappening = true;
             Gdx.app.log("expl", "X - " + explosionHappening);
 
