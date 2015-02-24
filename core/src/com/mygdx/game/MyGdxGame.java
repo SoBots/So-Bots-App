@@ -170,7 +170,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         touchCoordinateX = screenX;
         touchCoordinateY = screenY;
         stateTime = 0;
-        if (Math.abs(touchCoordinateX-x)<=100 && Math.abs(touchCoordinateY-y)<=100) {
+        if (Math.abs(touchCoordinateX-(x+30))<=100 && Math.abs(touchCoordinateY-(y+30))<=100) {
             explosionHappening = true;
             Gdx.app.log("expl", "X - " + explosionHappening);
 
