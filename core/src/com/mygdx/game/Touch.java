@@ -1,6 +1,5 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 
 /**
@@ -11,9 +10,9 @@ import com.badlogic.gdx.InputAdapter;
 
 public class Touch extends InputAdapter {
 
-    private MyGdxGame game;
+    private Game game;
 
-    public Touch(MyGdxGame game){
+    public Touch(Game game){
         this.game = game;
     }
 

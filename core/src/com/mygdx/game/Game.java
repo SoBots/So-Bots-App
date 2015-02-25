@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public class MyGdxGame extends ApplicationAdapter {
+public class Game extends ApplicationAdapter {
 
 	private SpriteBatch batch;
     private Touch touch;
@@ -80,7 +80,7 @@ public class MyGdxGame extends ApplicationAdapter {
         if(spawnTimer > 2f) {
             //getRobotLoc();
             //Add a for loop here for the desired number of robots
-            robots.add(new Target("robot.png", camera, batch, 100, 100));
+            robots.add(new Target("red-bot.png", camera, batch, 300, 300));
             spawnTimer = 0f;
         }
 

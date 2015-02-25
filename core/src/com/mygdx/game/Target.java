@@ -12,8 +12,7 @@ import com.badlogic.gdx.math.Vector3;
  *
  *
  */
-public class Target
-{
+public class Target {
     private Texture tTexture;
     private Sprite tSprite;
 
@@ -34,10 +33,10 @@ public class Target
     }
 
     public void render(){
-        spawnRobot();
+        spawnTarget();
     }
 
-    public void spawnRobot(){
+    public void spawnTarget(){
         Vector3 spawnPoint = new Vector3();
         camera.unproject(spawnPoint.set(spawnX, spawnY, 0));
         batch.draw(tSprite, spawnPoint.x, spawnPoint.y);
