@@ -25,6 +25,10 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
     private Sprite robotSprite;
     private Texture robotTexture;
     private Vector2 robotPos = new Vector2(0, 0);
+    private float x=20;
+    private float y=40;
+    boolean reverseH = false;
+    boolean reverseV = false;
 
     private Random random;
     private Sprite SamRowlands;
@@ -65,7 +69,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(255, 255, 255, 255);
+		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
@@ -79,6 +83,7 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         if(spawnTimer > 2f) {
             getRobotLoc();
             spawnTimer = 0f;
+
         }
 
         spawnRobot();
@@ -131,9 +136,13 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         float maxX = Gdx.graphics.getWidth()-robotSprite.getWidth();
         float minY = robotSprite.getHeight();
         float maxY = Gdx.graphics.getHeight()-robotSprite.getHeight();
-        robotPos = new Vector2(random.nextFloat() * (maxX-minX) + minX, random.nextFloat() * (maxY - minY) + minY);
+        x=random.nextFloat() * (maxX-minX) + minX;
+        y=random.nextFloat() * (maxY - minY) + minY;
+        robotPos = new Vector2(x, y);
+
         Gdx.app.log("coOrds", "X - " + robotPos.x + "\n Y - " + robotPos.y);
     }
+
 
     public void spawnRobot(){
         camera.unproject(touchPoint.set(robotPos.x, robotPos.y, 0));
@@ -161,7 +170,13 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         touchCoordinateX = screenX;
         touchCoordinateY = screenY;
         stateTime = 0;
-        explosionHappening = true;
+        //Click within distance.
+        if (Math.abs(touchCoordinateX-(x+(robotSprite.getWidth()/2)))<=100 && Math.abs(touchCoordinateY-(y+(robotSprite.getHeight()/2)))<=100) {
+            explosionHappening = true;
+            Gdx.app.log("expl", "X - " + explosionHappening);
+
+        }
+        else explosionHappening = false;
         return true;
     }
 
