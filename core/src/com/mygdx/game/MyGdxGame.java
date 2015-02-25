@@ -63,7 +63,6 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         font = new BitmapFont();
         font.setScale(10f);
         createRobot();
-        createExplosion();
         createCamera();
 	}
 
@@ -89,28 +88,11 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         spawnRobot();
 
         stateTime += Gdx.graphics.getDeltaTime();
-        if (!explosionAnimation.isAnimationFinished(stateTime) && explosionHappening) {
-            currentFrame = explosionAnimation.getKeyFrame(stateTime, false);
-            currentFrameSprite = new Sprite(currentFrame);
-            camera.unproject(touchPoint.set(touchCoordinateX, touchCoordinateY, 0));
-            batch.draw(currentFrameSprite, touchPoint.x, touchPoint.y);
-        }
 
 		batch.end();
 	}
 
-    public void createExplosion(){
-        explosionSheet = new Texture(Gdx.files.internal("explosion.png"));
-        TextureRegion[][] textureRegions = TextureRegion.split(explosionSheet, explosionSheet.getWidth()/FRAME_COLS, explosionSheet.getHeight()/FRAME_ROWS);
-        explosionFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
-        int index = 0;
-        for(int i = 0; i < FRAME_ROWS; i++)
-            for(int j = 0; j < FRAME_COLS; j++)
-                explosionFrames[index++] = textureRegions[i][j];
-        explosionAnimation = new Animation(0.025f, explosionFrames);
 
-        explosionSound = Gdx.audio.newSound(Gdx.files.internal("boom.mp4"));
-    }
 
     public void createCamera(){
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
