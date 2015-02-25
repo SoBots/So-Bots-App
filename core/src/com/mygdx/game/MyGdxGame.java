@@ -82,9 +82,9 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         if(spawnTimer > 2f) {
             getRobotLoc();
             spawnTimer = 0f;
-
         }
 
+        // comment
         spawnRobot();
 
         stateTime += Gdx.graphics.getDeltaTime();
