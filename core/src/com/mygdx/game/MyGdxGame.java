@@ -16,33 +16,24 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 
-public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
-	private SpriteBatch batch;
+public class MyGdxGame extends ApplicationAdapter {
 
-    private Sprite robotSprite;
-    private Texture robotTexture;
+	private SpriteBatch batch;
+    private Touch touch;
+
+    private float sWidth;
+    private float sHeight;
+
+    private List<Target> robots;
+
     private Vector2 robotPos = new Vector2(0, 0);
-    private float x=20;
-    private float y=40;
-    boolean reverseH = false;
-    boolean reverseV = false;
 
     private Random random;
-    private Sprite SamRowlands;
-
-    private Texture explosionSheet;
-    private TextureRegion[] explosionFrames;
-    private Animation explosionAnimation;
-    private TextureRegion currentFrame;
-    private Sprite currentFrameSprite;
-    private boolean explosionHappening = false;
-    private Sound explosionSound;
-
-    private final int FRAME_COLS = 5;
-    private final int FRAME_ROWS = 3;
 
     private float stateTime, spawnTimer = 0;
     private int touchCoordinateX = 0;
@@ -56,18 +47,23 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
 
 	
 	@Override
-	public void create () {
+	public void create() {
 		batch = new SpriteBatch();
-        Gdx.input.setInputProcessor(this);
+        touch = new Touch(this);
+        sWidth = Gdx.graphics.getWidth();
+        sHeight = Gdx.graphics.getHeight();
+        robots = new ArrayList<Target>();
+        Gdx.input.setInputProcessor(touch);
         random = new Random();
         font = new BitmapFont();
         font.setScale(10f);
-        createRobot();
         createCamera();
 	}
 
 	@Override
-	public void render () {
+	public void render() {
+
+        //Colours background black
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -79,106 +75,46 @@ public class MyGdxGame extends ApplicationAdapter implements InputProcessor {
         font.draw(batch, "Score: " + score, scoreLoc.x, scoreLoc.y);
 
         spawnTimer += Gdx.graphics.getDeltaTime();
+
+        //If 2 seconds elapsed since last drawing, re-draw robots
         if(spawnTimer > 2f) {
-            getRobotLoc();
+            //getRobotLoc();
+            //Add a for loop here for the desired number of robots
+            robots.add(new Target("robot.png", camera, batch, 100, 100));
             spawnTimer = 0f;
         }
 
-        // comment
-        spawnRobot();
+        //For each robot in array; draw to screen
+        for(Target t: robots)
+            t.render();
 
         stateTime += Gdx.graphics.getDeltaTime();
 
 		batch.end();
 	}
 
+    /*//Sets co-ordinates of player touch.
+    public void setCos(int x, int y){
+        touchCoordinateX = x;
+        touchCoordinateY = y;
+        if (Math.abs(touchCoordinateX-((robotSprite.getWidth()/2)))<=100 && Math.abs(touchCoordinateY-((robotSprite.getHeight()/2)))<=100) {
+            Gdx.app.log("expl", "X - " + "You Clicked!");
+        }
+    }*/
 
 
     public void createCamera(){
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.position.set(camera.viewportWidth * .5f, camera.viewportHeight * .5f, 0f);
-
-        //To initialize the camera, we need to construct the camera with the width and height of the graphic area.
-        //Then we need to set the  camera position to be smack in the middle of the screen.  The camera uses 3D coordinates,
-        //but we are only concerned with the X and Y coordinates for the explosion, so we set the Z position to zero
-        // and the x and y coordinates of the camera to the screens midpoint.
-        //Now that we have our camera created the way we want it, we can unproject the touch points in the
-        //render method to reflect the game world coordinates using a Vector3 class .
-        // The touchPoint, which is the instance of the Vector3 class,  can then be used to set the animation location.
     }
 
-    public void createRobot() {
-        robotTexture = new Texture(Gdx.files.internal("robot.png"));
-        robotSprite = new Sprite(robotTexture);
-        //robotSprite.setOrigin();
-    }
-
-    public void getRobotLoc(){
+    /*public void getRobotLoc(){
         float minX = robotSprite.getWidth();
         float maxX = Gdx.graphics.getWidth()-robotSprite.getWidth();
         float minY = robotSprite.getHeight();
         float maxY = Gdx.graphics.getHeight()-robotSprite.getHeight();
-        x=random.nextFloat() * (maxX-minX) + minX;
-        y=random.nextFloat() * (maxY - minY) + minY;
+        float x=random.nextFloat() * (maxX-minX) + minX;
+        float y=random.nextFloat() * (maxY - minY) + minY;
         robotPos = new Vector2(x, y);
-
-        Gdx.app.log("coOrds", "X - " + robotPos.x + "\n Y - " + robotPos.y);
-    }
-
-
-    public void spawnRobot(){
-        camera.unproject(touchPoint.set(robotPos.x, robotPos.y, 0));
-        batch.draw(robotSprite, touchPoint.x, touchPoint.y);
-    }
-
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        explosionSound.play();
-        touchCoordinateX = screenX;
-        touchCoordinateY = screenY;
-        stateTime = 0;
-        //Click within distance.
-        if (Math.abs(touchCoordinateX-(x+(robotSprite.getWidth()/2)))<=100 && Math.abs(touchCoordinateY-(y+(robotSprite.getHeight()/2)))<=100) {
-            explosionHappening = true;
-            Gdx.app.log("expl", "X - " + explosionHappening);
-
-        }
-        else explosionHappening = false;
-        return true;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
-    }
+    }*/
 }
