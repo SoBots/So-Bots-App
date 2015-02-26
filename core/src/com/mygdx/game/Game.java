@@ -89,7 +89,7 @@ public class Game extends ApplicationAdapter {
             t.render();
 
         stateTime += Gdx.graphics.getDeltaTime();
-
+        //test
 		batch.end();
 	}
 
