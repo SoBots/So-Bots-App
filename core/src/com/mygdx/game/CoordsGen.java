@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 //-- Generates a set of co-ordinates --//
@@ -10,7 +11,7 @@ public class CoordsGen {
     public static Vector2[] genCoords(int n, int sWidth, int sHeight){
         Vector2[] coords = new Vector2[n];
 
-
+        int maxX = Gdx.graphics.getWidth();
 
           /*public void getRobotLoc(){
         float minX = robotSprite.getWidth();
