@@ -94,7 +94,7 @@ public class Game extends ApplicationAdapter {
 
 
     private void createCamera(){
-        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.position.set(camera.viewportWidth * .5f, camera.viewportHeight * .5f, 0f);
+        camera = new OrthographicCamera(sWidth, sHeight);
+        camera.setToOrtho(false, sWidth, sHeight);
     }
 }
