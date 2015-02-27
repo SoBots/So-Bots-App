@@ -29,7 +29,7 @@ public class Game extends ApplicationAdapter {
 	private SpriteBatch batch;
 
     private Touch touch;
-    private Vector2 touchCoords;
+    private Vector2 touchCoords = new Vector2(0, 0);
 
     private float sWidth;
     private float sHeight;
@@ -84,6 +84,8 @@ public class Game extends ApplicationAdapter {
     //Sets co-ordinates of player touch.
     public void setCos(Vector2 coords){
         touchCoords = new Vector2(coords.x, coords.y);
+        //if (t.getBoundingRectangle().contains(touchCoords))
+        //    Gdx.app.log("expl", "You hit the robot!");
         //if (Math.abs(touchCoordinateX-((robotSprite.getWidth()/2)))<=100 && Math.abs(touchCoordinateY-((robotSprite.getHeight()/2)))<=100) {
         //   Gdx.app.log("expl", "X - " + "You Clicked!");
         //}
