@@ -13,45 +13,63 @@ public class CoordsGen {
 
     //Generates n sets of x/y co-ordinates.
     public static Vector2[] genCoords(int n,int scrWidth, int scrHeight, int sWidth, int sHeight){
+
+        //Vector array which will be returned containing the locations to spawn robots
         Vector2[] coords = new Vector2[n];
 
+        //The constraints set by sprite and screen size
         int minLeft = 50;  //Tolerance on left of screen
         int maxRight = scrWidth-sWidth-50; //Tolerance on right of screen
         int minTop = 50;   //Tolerance at top of screen
         int maxBottom = scrHeight-sHeight-50;//Tolerance at bottom
         int spaceTol = 50; //Tolerance for space between bot spawns
 
+        //Obvious-new random
         Random rn = new Random();
 
-        int i = 1;
-
-        Vector2 loc = new Vector2(); //Vector2 of the coordinates generated
+        //Creates vectors to hold planned and already committed locations
+        Vector2 loc = new Vector2(); //Vector2 of the coordinates generated (not committed)
         Vector2 locCheck = new Vector2(); //Placeholder vector for checking coordinate suitability
+                                          //with already comitted coordinates.
 
         boolean success = true; //Determines whether to run loop again to find new coordinates
 
+        //First set of coordinates cannot clash, no point in doing this inside while loop
         coords[0].add((float)rn.nextInt((maxRight - minLeft) + 1) + minLeft, (float)rn.nextInt((maxBottom - minTop) + 1) + minTop);
+
+        //iterator for the while loop, starts at one because first set already determined
+        int i = 1;
+        float rand1;
+        float rand2;
 
         while (i<n) {
 
-            //adds new
-            loc = loc.add((float)rn.nextInt((maxRight - minLeft) + 1) + minLeft, (float)rn.nextInt((maxBottom - minTop) + 1) + minTop);
+            //Sets a possible location for the next coordinates
+            rand1 = (float)rn.nextInt((maxRight - minLeft) + 1) + minLeft;
+            rand2 = (float)rn.nextInt((maxBottom - minTop) + 1) + minTop;
+            loc = loc.add(rand1, rand2);
 
-
+            //Iterates through already committed coordinates to check for clashes
             for (int j = 0; j < i; j++) {
                 locCheck = coords[j];
-                if (locCheck.x>(loc.x-spaceTol) && locCheck.x<(loc.x+sWidth+spaceTol)) {
+                //If the new coordinates fall within the area of a previous one, the numbers aren't
+                //suitable. This part checks both x and y domain.
+                if ((loc.x>(locCheck.x-spaceTol) && loc.x<(locCheck.x+sWidth+spaceTol))||(loc.y>(locCheck.y-spaceTol) && loc.y<(locCheck.y+sHeight+spaceTol))) {
                     success = false;
                 }
-                if (locCheck.y>(loc.y-spaceTol) && locCheck.y<(loc.y+sHeight+spaceTol)) {
-                    success = false;
-                }
+                else success=true;
 
             }
 
+            //If boolean hasn't been set to false, the coordinates were correct and are therefore
+            //committed to the coordinate array for robot generation
             if (success) {
                 coords[i].add(loc);
                 i++;
+            }
+            //However if !successful, the coordinates are removed
+            else {
+                loc.sub((float)rn.nextInt((maxRight - minLeft) + 1) + minLeft, (float)rn.nextInt((maxBottom - minTop) + 1) + minTop);
             }
 
         }
