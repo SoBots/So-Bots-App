@@ -39,6 +39,8 @@ public class CoordsGen {
 
         //iterator for the while loop, starts at one because first set already determined
         int i = 1;
+
+        //Have to define these seperately
         float rand1;
         float rand2;
 
@@ -69,7 +71,7 @@ public class CoordsGen {
             }
             //However if !successful, the coordinates are removed
             else {
-                loc.sub((float)rn.nextInt((maxRight - minLeft) + 1) + minLeft, (float)rn.nextInt((maxBottom - minTop) + 1) + minTop);
+                loc.sub(rand1,rand2);
             }
 
         }
