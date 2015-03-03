@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
@@ -26,7 +27,7 @@ import com.badlogic.gdx.math.Vector3;
         this.camera = camera;
         this.batch = batch;
 
-        this.spawnLoc = new Vector2(spawnLoc.x, spawnLoc.y);
+        this.spawnLoc = spawnLoc;
     }
 
     //Called in Game's render method.
@@ -34,11 +35,13 @@ import com.badlogic.gdx.math.Vector3;
         spawnTarget();
     }
 
+    //Returns the dimensions of target.
+    public Rectangle getBoundingRectangle() { return tSprite.getBoundingRectangle(); }
+
     //Draws the sprite to a particular point of screen.
     private void spawnTarget(){
         Vector3 spawnPoint = new Vector3();
         camera.unproject(spawnPoint.set(spawnLoc.x, spawnLoc.y, 0));
         batch.draw(tSprite, spawnPoint.x, spawnPoint.y);
     }
-
 }

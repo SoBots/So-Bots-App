@@ -34,9 +34,11 @@ public class Game extends ApplicationAdapter {
     private float sWidth;
     private float sHeight;
 
-    private float stateTime, spawnTimer = 0;
-    private List<Target> robots;
+    private float stateTime, spawnTimer;
+    private Target[] robots;
     private Score score;
+
+    private boolean robotSet;
 
 	@Override
 	public void create() {
@@ -44,18 +46,14 @@ public class Game extends ApplicationAdapter {
         touch = new Touch(this);
         sWidth = Gdx.graphics.getWidth();
         sHeight = Gdx.graphics.getHeight();
-        robots = new ArrayList<Target>();
         Gdx.input.setInputProcessor(touch);
         random = new Random();
         createCamera();
-        score = new Score(camera, batch, new Vector2(sWidth/2, sHeight - 150));
+        score = new Score(camera, batch, new Vector2(sWidth, sHeight));
 	}
 
 	@Override
 	public void render() {
-
-
-        //testing commit 2
         //Colours background black
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -68,15 +66,17 @@ public class Game extends ApplicationAdapter {
 
         //If 2 seconds elapsed since last drawing, re-draw robots
         if(spawnTimer > 2f) {
+            robots = new Target[1];
             //getRobotLoc();
             //Add a for loop here for the desired number of robots
-            robots.add(new Target("red-bot.png", camera, batch, new Vector2(150, 150)));
+            robots[0] = new Target("red-bot.png", camera, batch, new Vector2(150, 150));
             spawnTimer = 0f;
+            robotSet = true;
         }
 
-        //For each robot in array; draw to screen
-        for(Target t: robots)
-            t.render();
+        if(robotSet)
+            for(Target t: robots)
+                t.render();
 
         score.render();
 
@@ -86,15 +86,18 @@ public class Game extends ApplicationAdapter {
 
     //Sets co-ordinates of player touch.
     public void setCos(Vector2 coords){
-        touchCoords = new Vector2(coords.x, coords.y);
-        //if (Math.abs(touchCoordinateX-((robotSprite.getWidth()/2)))<=100 && Math.abs(touchCoordinateY-((robotSprite.getHeight()/2)))<=100) {
-        //   Gdx.app.log("expl", "X - " + "You Clicked!");
-        //}
+        touchCoords = coords;
+        Gdx.app.log("expl", "Co-ords - " + touchCoords);
+        if(robotSet)
+            for(Target t: robots)
+                if (t.getBoundingRectangle().contains(touchCoords)) {
+                Gdx.app.log("expl", "You hit the robot!");
+                score.updateScore(1);
+            }
     }
 
-
     private void createCamera(){
-        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.position.set(camera.viewportWidth * .5f, camera.viewportHeight * .5f, 0f);
+        camera = new OrthographicCamera(sWidth, sHeight);
+        camera.setToOrtho(false, sWidth, sHeight);
     }
 }
