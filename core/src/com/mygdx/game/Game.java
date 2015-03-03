@@ -34,7 +34,7 @@ public class Game extends ApplicationAdapter {
     private float sWidth;
     private float sHeight;
 
-    private float stateTime, spawnTimer = 0;
+    private float stateTime, spawnTimer;
     private List<Target> robots;
     private Score score;
 
@@ -48,14 +48,11 @@ public class Game extends ApplicationAdapter {
         Gdx.input.setInputProcessor(touch);
         random = new Random();
         createCamera();
-        score = new Score(camera, batch, new Vector2(sWidth/2, sHeight - 150));
+        score = new Score(camera, batch, new Vector2(sWidth, sHeight));
 	}
 
 	@Override
 	public void render() {
-
-
-        //testing commit 2
         //Colours background black
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -86,15 +83,17 @@ public class Game extends ApplicationAdapter {
 
     //Sets co-ordinates of player touch.
     public void setCos(Vector2 coords){
-        touchCoords = new Vector2(coords.x, coords.y);
-        //if (Math.abs(touchCoordinateX-((robotSprite.getWidth()/2)))<=100 && Math.abs(touchCoordinateY-((robotSprite.getHeight()/2)))<=100) {
-        //   Gdx.app.log("expl", "X - " + "You Clicked!");
-        //}
+        touchCoords = coords;
+        Gdx.app.log("expl", "Co-ords - " + touchCoords);
+        for(Target t: robots)
+            if (t.getBoundingRectangle().contains(touchCoords)) {
+                Gdx.app.log("expl", "You hit the robot!");
+                score.updateScore(1);
+            }
     }
 
-
     private void createCamera(){
-        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.position.set(camera.viewportWidth * .5f, camera.viewportHeight * .5f, 0f);
+        camera = new OrthographicCamera(sWidth, sHeight);
+        camera.setToOrtho(false, sWidth, sHeight);
     }
 }
