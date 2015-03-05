@@ -18,30 +18,30 @@ import com.badlogic.gdx.math.Vector3;
     private Camera camera;
     private Batch batch;
 
-    private Vector2 spawnLoc;
+    private Vector2 passedLoc;
+    private Vector3 spawnPoint;
 
-    public Target(String texture, Camera camera, Batch batch, Vector2 spawnLoc){
+    public Target(String texture, Camera camera, Batch batch, Vector2 passedLoc){
         tTexture = new Texture(Gdx.files.internal(texture));
         tSprite = new Sprite(tTexture);
 
         this.camera = camera;
         this.batch = batch;
 
-        this.spawnLoc = spawnLoc;
+        this.passedLoc = passedLoc;
     }
 
     //Called in Game's render method.
-    public void render(){
-        spawnTarget();
-    }
+    public void render() { spawnTarget(); }
 
     //Returns the dimensions of target.
     public Rectangle getBoundingRectangle() { return tSprite.getBoundingRectangle(); }
 
     //Draws the sprite to a particular point of screen.
     private void spawnTarget(){
-        Vector3 spawnPoint = new Vector3();
-        camera.unproject(spawnPoint.set(spawnLoc.x, spawnLoc.y, 0));
-        batch.draw(tSprite, spawnPoint.x, spawnPoint.y);
+        spawnPoint = new Vector3();
+        camera.unproject(spawnPoint.set(passedLoc.x, passedLoc.y, 0));
+        tSprite.setPosition(spawnPoint.x, spawnPoint.y);
+        tSprite.draw(batch);
     }
 }

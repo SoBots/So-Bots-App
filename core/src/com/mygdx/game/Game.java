@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 import java.util.Random;
 
@@ -35,15 +36,15 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
-        touch = new Touch(this);
         scrWidth = Gdx.graphics.getWidth();
         scrHeight = Gdx.graphics.getHeight();
         spriteWidth = 150;
         spriteHeight = 150;
-        Gdx.input.setInputProcessor(touch);
         random = new Random();
         createCamera();
         score = new Score(camera, batch, new Vector2(scrWidth, scrHeight));
+        touch = new Touch(this, camera);
+        Gdx.input.setInputProcessor(touch);
 	}
 
 	@Override
@@ -60,13 +61,11 @@ public class Game extends ApplicationAdapter {
 
         //If 2 seconds elapsed since last drawing, re-draw robots
         if(spawnTimer > 2f) {
-            robots = new Target[5];
+            robots = new Target[1];
             //getRobotLoc();
             //Add a for loop here for the desired number of robots
 
             Vector2[] robotLoc = CoordsGen.genCoords(robots.length, (int) scrWidth, (int) scrHeight, (int) spriteWidth, (int) spriteHeight);
-            String three = robotLoc[1].toString();
-            Gdx.app.log("co3", three);
             for ( int i=0; i<robots.length; i++)
                 robots[i] = new Target("red-bot.png", camera, batch, robotLoc[i]);
             spawnTimer = 0f;
@@ -87,11 +86,14 @@ public class Game extends ApplicationAdapter {
     public void setCos(Vector2 coords){
         touchCoords = coords;
         Gdx.app.log("expl", "Co-ords - " + touchCoords);
+
         if(robotSet)
-            for(Target t: robots)
+            for(Target t: robots){
+                Gdx.app.log("rect", "Bots Rect - " + t.getBoundingRectangle().x + " " + t.getBoundingRectangle().y);
                 if (t.getBoundingRectangle().contains(touchCoords)) {
-                Gdx.app.log("expl", "You hit the robot!");
-                score.updateScore(1);
+                    Gdx.app.log("expl", "You hit the robot!");
+                    score.updateScore(1);
+                }
             }
     }
 
