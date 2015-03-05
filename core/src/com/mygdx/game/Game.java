@@ -45,6 +45,8 @@ public class Game extends ApplicationAdapter {
         score = new Score(camera, batch, new Vector2(scrWidth, scrHeight));
         touch = new Touch(this, camera);
         Gdx.input.setInputProcessor(touch);
+        //State currentState = new State();
+        //currentState.setState(States.PLAY);
 	}
 
 	@Override
