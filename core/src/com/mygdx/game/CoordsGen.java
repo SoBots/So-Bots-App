@@ -28,7 +28,7 @@ public class CoordsGen {
         Random rn = new Random();
 
         //Creates vectors to hold planned and already committed locations
-        Vector2 loc = new Vector2(); //Vector2 of the coordinates generated (not committed)
+        //Vector2 loc = new Vector2(); //Vector2 of the coordinates generated (not committed)
         Vector2 locCheck = new Vector2(); //Placeholder vector for checking coordinate suitability
                                           //with already comitted coordinates.
 
@@ -49,7 +49,7 @@ public class CoordsGen {
             //Sets a possible location for the next coordinates
             rand1 = (float)rn.nextInt((maxRight - minLeft) + 1) + minLeft;
             rand2 = (float)rn.nextInt((maxBottom - minTop) + 1) + minTop;
-            loc = loc.add(rand1, rand2);
+            Vector2 loc = new Vector2(rand1, rand2);
 
             //Iterates through already committed coordinates to check for clashes
             for (int j = 0; j < i; j++) {
@@ -70,9 +70,7 @@ public class CoordsGen {
                 i++;
             }
             //However if !successful, the coordinates are removed
-            else {
-                loc.sub(rand1,rand2);
-            }
+
 
         }
 

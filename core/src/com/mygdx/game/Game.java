@@ -60,11 +60,13 @@ public class Game extends ApplicationAdapter {
 
         //If 2 seconds elapsed since last drawing, re-draw robots
         if(spawnTimer > 2f) {
-            robots = new Target[2];
+            robots = new Target[5];
             //getRobotLoc();
             //Add a for loop here for the desired number of robots
 
             Vector2[] robotLoc = CoordsGen.genCoords(robots.length, (int) scrWidth, (int) scrHeight, (int) spriteWidth, (int) spriteHeight);
+            String three = robotLoc[1].toString();
+            Gdx.app.log("co3", three);
             for ( int i=0; i<robots.length; i++)
                 robots[i] = new Target("red-bot.png", camera, batch, robotLoc[i]);
             spawnTimer = 0f;
