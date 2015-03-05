@@ -35,7 +35,7 @@ public class CoordsGen {
         boolean success = true; //Determines whether to run loop again to find new coordinates
 
         //First set of coordinates cannot clash, no point in doing this inside while loop
-        coords[0].add((float)rn.nextInt((maxRight - minLeft) + 1) + minLeft, (float)rn.nextInt((maxBottom - minTop) + 1) + minTop);
+        coords[0]= new Vector2((float) rn.nextInt((maxRight - minLeft) + 1) + minLeft, (float) rn.nextInt((maxBottom - minTop) + 1) + minTop);
 
         //iterator for the while loop, starts at one because first set already determined
         int i = 1;
@@ -66,7 +66,7 @@ public class CoordsGen {
             //If boolean hasn't been set to false, the coordinates were correct and are therefore
             //committed to the coordinate array for robot generation
             if (success) {
-                coords[i].add(loc);
+                coords[i] = loc;
                 i++;
             }
             //However if !successful, the coordinates are removed

@@ -2,22 +2,12 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 //-- Runs the game. --//
@@ -31,8 +21,10 @@ public class Game extends ApplicationAdapter {
     private Touch touch;
     private Vector2 touchCoords;
 
-    private float sWidth;
-    private float sHeight;
+    private float scrWidth;
+    private float scrHeight;
+    private float spriteWidth;
+    private float spriteHeight;
 
     private float stateTime, spawnTimer;
     private Target[] robots;
@@ -44,12 +36,14 @@ public class Game extends ApplicationAdapter {
 	public void create() {
 		batch = new SpriteBatch();
         touch = new Touch(this);
-        sWidth = Gdx.graphics.getWidth();
-        sHeight = Gdx.graphics.getHeight();
+        scrWidth = Gdx.graphics.getWidth();
+        scrHeight = Gdx.graphics.getHeight();
+        spriteWidth = 150;
+        spriteHeight = 150;
         Gdx.input.setInputProcessor(touch);
         random = new Random();
         createCamera();
-        score = new Score(camera, batch, new Vector2(sWidth, sHeight));
+        score = new Score(camera, batch, new Vector2(scrWidth, scrHeight));
 	}
 
 	@Override
@@ -66,10 +60,13 @@ public class Game extends ApplicationAdapter {
 
         //If 2 seconds elapsed since last drawing, re-draw robots
         if(spawnTimer > 2f) {
-            robots = new Target[1];
+            robots = new Target[2];
             //getRobotLoc();
             //Add a for loop here for the desired number of robots
-            robots[0] = new Target("red-bot.png", camera, batch, new Vector2(150, 150));
+
+            Vector2[] robotLoc = CoordsGen.genCoords(robots.length, (int) scrWidth, (int) scrHeight, (int) spriteWidth, (int) spriteHeight);
+            for ( int i=0; i<robots.length; i++)
+                robots[i] = new Target("red-bot.png", camera, batch, robotLoc[i]);
             spawnTimer = 0f;
             robotSet = true;
         }
@@ -97,7 +94,7 @@ public class Game extends ApplicationAdapter {
     }
 
     private void createCamera(){
-        camera = new OrthographicCamera(sWidth, sHeight);
-        camera.setToOrtho(false, sWidth, sHeight);
+        camera = new OrthographicCamera(scrWidth, scrHeight);
+        camera.setToOrtho(false, scrWidth, scrHeight);
     }
 }
