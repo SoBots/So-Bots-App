@@ -61,7 +61,9 @@ public class Game extends ApplicationAdapter {
 
         //If 2 seconds elapsed since last drawing, re-draw robots
         if(spawnTimer > 2f) {
-            robots = new Target[5];
+            int currentScore = score.getScore();
+            int level = Difficulty.getDifficulty(currentScore);
+            robots = new Target[level];
             //getRobotLoc();
             //Add a for loop here for the desired number of robots
 

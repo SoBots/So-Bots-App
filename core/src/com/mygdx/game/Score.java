@@ -41,6 +41,9 @@ public class Score {
         score += points;
     }
 
+    //Returns current score value.
+    public int getScore() { return score; }
+
     //Returns the width and height of the current score text.
     public Vector2 getScoreDimensions() { return scoreDimen; }
 
