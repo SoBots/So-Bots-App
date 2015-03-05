@@ -38,7 +38,7 @@ public class Game extends ApplicationAdapter {
 		batch = new SpriteBatch();
         scrWidth = Gdx.graphics.getWidth();
         scrHeight = Gdx.graphics.getHeight();
-        spriteWidth = 150;
+        spriteWidth = 104;
         spriteHeight = 150;
         random = new Random();
         createCamera();
