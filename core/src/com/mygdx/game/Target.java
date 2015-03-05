@@ -37,11 +37,26 @@ import com.badlogic.gdx.math.Vector3;
     //Returns the dimensions of target.
     public Rectangle getBoundingRectangle() { return tSprite.getBoundingRectangle(); }
 
+    //Called if player touches this target.
+    public void targetTouched() {
+        playAnim();
+    }
+
     //Draws the sprite to a particular point of screen.
     private void spawnTarget(){
         spawnPoint = new Vector3();
         camera.unproject(spawnPoint.set(passedLoc.x, passedLoc.y, 0));
         tSprite.setPosition(spawnPoint.x, spawnPoint.y);
         tSprite.draw(batch);
+    }
+
+    //Splits the passed in texture into each frame for animation.
+    private void createAnim(){
+
+    }
+
+    //Plays the created animation.
+    private void playAnim(){
+
     }
 }
