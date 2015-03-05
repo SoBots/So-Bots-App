@@ -61,13 +61,14 @@ public class Game extends ApplicationAdapter {
 
         //If 2 seconds elapsed since last drawing, re-draw robots
         if(spawnTimer > 2f) {
-            robots = new Target[1];
+            robots = new Target[5];
             //getRobotLoc();
             //Add a for loop here for the desired number of robots
 
             Vector2[] robotLoc = CoordsGen.genCoords(robots.length, (int) scrWidth, (int) scrHeight, (int) spriteWidth, (int) spriteHeight);
-            for ( int i=0; i<robots.length; i++)
-                robots[i] = new Target("red-bot.png", camera, batch, robotLoc[i]);
+            robots[0] = new Target("red-bot.png", camera, batch, robotLoc[0]);
+            for ( int i=1; i<robots.length; i++)
+                robots[i] = new Target("blue-bot.png", camera, batch, robotLoc[i]);
             spawnTimer = 0f;
             robotSet = true;
         }
@@ -88,13 +89,14 @@ public class Game extends ApplicationAdapter {
         Gdx.app.log("expl", "Co-ords - " + touchCoords);
 
         if(robotSet)
-            for(Target t: robots){
-                Gdx.app.log("rect", "Bots Rect - " + t.getBoundingRectangle().x + " " + t.getBoundingRectangle().y);
-                if (t.getBoundingRectangle().contains(touchCoords)) {
-                    Gdx.app.log("expl", "You hit the robot!");
-                    score.updateScore(1);
-                }
+            //Gdx.app.log("rect", "Bots Rect - " + t.getBoundingRectangle().x + " " + t.getBoundingRectangle().y);
+            if (robots[0].getBoundingRectangle().contains(touchCoords)) {
+                Gdx.app.log("expl", "You hit the robot!");
+                score.updateScore(1);
+                spawnTimer = 2f;
             }
+            else score.updateScore(-1);
+
     }
 
     private void createCamera(){
