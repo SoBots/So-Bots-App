@@ -8,10 +8,9 @@ public class Difficulty {
         double x = (double) score;
         if (x>0)
             //log function coefficient determines the maximum numb
-            y = 2*Math.log(x);
+            y = 1 + 2*Math.log(x);
         else
             y= 1;
-        y = Math.ceil(y);
         return (int) y;
     }
 }

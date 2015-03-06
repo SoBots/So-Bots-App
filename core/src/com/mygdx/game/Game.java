@@ -66,6 +66,7 @@ public class Game extends ApplicationAdapter {
             int currentScore = score.getScore();
             int level = Difficulty.getDifficulty(currentScore);
             robots = new Target[level];
+
             //getRobotLoc();
             //Add a for loop here for the desired number of robots
 
