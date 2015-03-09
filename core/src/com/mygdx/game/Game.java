@@ -99,7 +99,7 @@ public class Game extends ApplicationAdapter {
                 Gdx.app.log("expl", "You hit the robot!");
                 score.updateScore(1);
                 robots[0].targetTouched();
-                spawnTimer = 2f;
+                spawnTimer = 1.5f;
             }
             else score.updateScore(-1);
 

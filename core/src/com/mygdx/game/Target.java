@@ -19,7 +19,7 @@ import com.badlogic.gdx.math.Vector3;
     private Animation tAnimation;
     private Sprite tSprite;
 
-    private boolean isTouched;
+    private float stateTime;
 
     private Camera camera;
     private Batch batch;
@@ -39,8 +39,7 @@ import com.badlogic.gdx.math.Vector3;
     //Called in Game's render method.
     public void render(float stateTime) {
         spawnTarget();
-        if(isTouched)
-            playAnim(stateTime);
+        this.stateTime = stateTime;
     }
 
     //Returns the dimensions of target.
@@ -48,8 +47,7 @@ import com.badlogic.gdx.math.Vector3;
 
     //Called if player touches this target.
     public void targetTouched() {
-        isTouched = true;
-        //playAnim();
+        playAnim();
     }
 
     //Draws the sprite to a particular point of screen.
@@ -76,7 +74,7 @@ import com.badlogic.gdx.math.Vector3;
     }
 
     //Plays the created animation.
-    private void playAnim(float stateTime){
+    private void playAnim(){
             tCurFrame = tAnimation.getKeyFrame(stateTime, false);
             tSprite = new Sprite(tCurFrame);
     }
