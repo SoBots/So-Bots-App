@@ -45,6 +45,8 @@ public class Game extends ApplicationAdapter {
         score = new Score(camera, batch, new Vector2(scrWidth, scrHeight));
         touch = new Touch(this, camera);
         Gdx.input.setInputProcessor(touch);
+        //State currentState = new State();
+        //currentState.setState(States.PLAY);
 	}
 
 	@Override
@@ -64,24 +66,25 @@ public class Game extends ApplicationAdapter {
             int currentScore = score.getScore();
             int level = Difficulty.getDifficulty(currentScore);
             robots = new Target[level];
+
             //getRobotLoc();
             //Add a for loop here for the desired number of robots
 
             Vector2[] robotLoc = CoordsGen.genCoords(robots.length, (int) scrWidth, (int) scrHeight, (int) spriteWidth, (int) spriteHeight);
-            robots[0] = new Target("red-bot.png", camera, batch, robotLoc[0]);
+            robots[0] = new Target("red-bot-sprite.png", camera, batch, robotLoc[0]);
             for ( int i=1; i<robots.length; i++)
                 robots[i] = new Target("blue-bot.png", camera, batch, robotLoc[i]);
             spawnTimer = 0f;
             robotSet = true;
         }
 
+        stateTime += Gdx.graphics.getDeltaTime();
+
         if(robotSet)
             for(Target t: robots)
-                t.render();
+                t.render(stateTime);
 
         score.render();
-
-        stateTime += Gdx.graphics.getDeltaTime();
 		batch.end();
 	}
 
@@ -95,7 +98,8 @@ public class Game extends ApplicationAdapter {
             if (robots[0].getBoundingRectangle().contains(touchCoords)) {
                 Gdx.app.log("expl", "You hit the robot!");
                 score.updateScore(1);
-                spawnTimer = 2f;
+                robots[0].targetTouched();
+                spawnTimer = 1.5f;
             }
             else score.updateScore(-1);
 

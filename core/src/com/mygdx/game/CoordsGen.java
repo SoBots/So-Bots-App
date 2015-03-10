@@ -29,6 +29,7 @@ public class CoordsGen {
         //First set of coordinates cannot clash, no point in doing this inside while loop
         float x = (float) rn.nextInt(maxLeft - minLeft + 1) + minLeft;
         float y = (float) rn.nextInt(minHeight - maxHeight + 1) + maxHeight;
+
         coords[0]= new Vector2(x,y);
 
         //iterator for the while loop, starts at one because first set already determined
