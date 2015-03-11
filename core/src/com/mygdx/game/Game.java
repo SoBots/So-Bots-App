@@ -62,7 +62,7 @@ public class Game extends ApplicationAdapter {
         spawnTimer += Gdx.graphics.getDeltaTime();
 
         //If 2 seconds elapsed since last drawing, re-draw robots
-        if(spawnTimer > 2f) {
+        if(spawnTimer > 1.75f) {
             int currentScore = score.getScore();
             int level = Difficulty.getDifficulty(currentScore);
             robots = new Target[level];
@@ -95,18 +95,22 @@ public class Game extends ApplicationAdapter {
 
         if(robotSet)
             //Gdx.app.log("rect", "Bots Rect - " + t.getBoundingRectangle().x + " " + t.getBoundingRectangle().y);
-            if (robots[0].getBoundingRectangle().contains(touchCoords)) {
+            if (robots[0].getBoundingRectangle().contains(touchCoords) && spawnTimer<1.5f) {
                 Gdx.app.log("expl", "You hit the robot!");
                 score.updateScore(1);
                 robots[0].targetTouched();
                 spawnTimer = 1.5f;
             }
-            else score.updateScore(-1);
+            else if (robots[0].getBoundingRectangle().contains(touchCoords) && spawnTimer>=1.5f) {
+                //Do nothing
+            }
+            else score.setScore(0);
 
     }
 
     private void createCamera(){
         camera = new OrthographicCamera(scrWidth, scrHeight);
         camera.setToOrtho(false, scrWidth, scrHeight);
+
     }
 }

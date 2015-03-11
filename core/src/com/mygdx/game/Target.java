@@ -69,7 +69,7 @@ import com.badlogic.gdx.math.Vector3;
         for(int i = 0; i < FRAME_ROWS; i++)
             for(int j = 0; j < FRAME_COLS; j++)
                 tFrames[index++] = textureRegions[i][j];
-        tAnimation = new Animation(0.025f, tFrames);
+        tAnimation = new Animation(0.0125f, tFrames);
         tSprite = new Sprite(tFrames[0]);
     }
 
