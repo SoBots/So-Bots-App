@@ -41,6 +41,8 @@ public class Score {
         score += points;
     }
 
+    public void setScore(int points) { score = points;}
+
     //Returns current score value.
     public int getScore() { return score; }
 

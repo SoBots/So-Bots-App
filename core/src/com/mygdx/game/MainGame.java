@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -13,17 +14,16 @@ import java.util.Random;
 
 //-- Runs the game. --//
 
-public class Game extends ApplicationAdapter {
+public class MainGame implements Screen {
+
+    private SoBots game;
 
     private Random random;
     private OrthographicCamera camera;
-	private SpriteBatch batch;
 
     private Touch touch;
     private Vector2 touchCoords;
 
-    private float scrWidth;
-    private float scrHeight;
     private float spriteWidth;
     private float spriteHeight;
 
@@ -33,36 +33,31 @@ public class Game extends ApplicationAdapter {
 
     private boolean robotSet;
 
-	@Override
-	public void create() {
-		batch = new SpriteBatch();
-        scrWidth = Gdx.graphics.getWidth();
-        scrHeight = Gdx.graphics.getHeight();
+	public MainGame(SoBots game) {
+        this.game = game;
         spriteWidth = 104;
         spriteHeight = 150;
         random = new Random();
         createCamera();
-        score = new Score(camera, batch, new Vector2(scrWidth, scrHeight));
+        score = new Score(camera, game.batch, new Vector2(game.scrWidth, game.scrHeight));
         touch = new Touch(this, camera);
         Gdx.input.setInputProcessor(touch);
-        //State currentState = new State();
-        //currentState.setState(States.PLAY);
 	}
 
 	@Override
-	public void render() {
+	public void render(float delta) {
         //Colours background black
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
-        batch.setProjectionMatrix(camera.combined);
-		batch.begin();
+        game.batch.setProjectionMatrix(camera.combined);
+		game.batch.begin();
 
         spawnTimer += Gdx.graphics.getDeltaTime();
 
         //If 2 seconds elapsed since last drawing, re-draw robots
-        if(spawnTimer > 2f) {
+        if(spawnTimer > 1.75f) {
             int currentScore = score.getScore();
             int level = Difficulty.getDifficulty(currentScore);
             robots = new Target[level];
@@ -70,10 +65,10 @@ public class Game extends ApplicationAdapter {
             //getRobotLoc();
             //Add a for loop here for the desired number of robots
 
-            Vector2[] robotLoc = CoordsGen.genCoords(robots.length, (int) scrWidth, (int) scrHeight, (int) spriteWidth, (int) spriteHeight);
-            robots[0] = new Target("red-bot-sprite.png", camera, batch, robotLoc[0]);
+            Vector2[] robotLoc = CoordsGen.genCoords(robots.length, (int) game.scrWidth, (int) game.scrHeight, (int) spriteWidth, (int) spriteHeight);
+            robots[0] = new Target("red-bot-sprite.png", camera, game.batch, robotLoc[0]);
             for ( int i=1; i<robots.length; i++)
-                robots[i] = new Target("blue-bot.png", camera, batch, robotLoc[i]);
+                robots[i] = new Target("blue-bot.png", camera, game.batch, robotLoc[i]);
             spawnTimer = 0f;
             robotSet = true;
         }
@@ -85,7 +80,7 @@ public class Game extends ApplicationAdapter {
                 t.render(stateTime);
 
         score.render();
-		batch.end();
+		game.batch.end();
 	}
 
     //Sets co-ordinates of player touch.
@@ -94,19 +89,55 @@ public class Game extends ApplicationAdapter {
         Gdx.app.log("expl", "Co-ords - " + touchCoords);
 
         if(robotSet)
-            //Gdx.app.log("rect", "Bots Rect - " + t.getBoundingRectangle().x + " " + t.getBoundingRectangle().y);
             if (robots[0].getBoundingRectangle().contains(touchCoords)) {
-                Gdx.app.log("expl", "You hit the robot!");
-                score.updateScore(1);
-                robots[0].targetTouched();
-                spawnTimer = 1.5f;
+                if(spawnTimer<1.5f) {
+                    Gdx.app.log("expl", "You hit the robot!");
+                    score.updateScore(1);
+                    robots[0].targetTouched();
+                    spawnTimer = 1.5f;
+                }
             }
-            else score.updateScore(-1);
 
+            else {
+                game.setScreen(new MainMenu(game));
+                dispose();
+            }
     }
 
     private void createCamera(){
-        camera = new OrthographicCamera(scrWidth, scrHeight);
-        camera.setToOrtho(false, scrWidth, scrHeight);
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, game.scrWidth, game.scrHeight);
+
+    }
+
+    @Override
+    public void show() {
+
+    }
+
+
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }
