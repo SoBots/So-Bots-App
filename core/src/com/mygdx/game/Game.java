@@ -94,18 +94,16 @@ public class Game extends ApplicationAdapter {
         Gdx.app.log("expl", "Co-ords - " + touchCoords);
 
         if(robotSet)
-            //Gdx.app.log("rect", "Bots Rect - " + t.getBoundingRectangle().x + " " + t.getBoundingRectangle().y);
-            if (robots[0].getBoundingRectangle().contains(touchCoords) && spawnTimer<1.5f) {
-                Gdx.app.log("expl", "You hit the robot!");
-                score.updateScore(1);
-                robots[0].targetTouched();
-                spawnTimer = 1.5f;
+            if (robots[0].getBoundingRectangle().contains(touchCoords)) {
+                if(spawnTimer<1.5f) {
+                    Gdx.app.log("expl", "You hit the robot!");
+                    score.updateScore(1);
+                    robots[0].targetTouched();
+                    spawnTimer = 1.5f;
+                }
             }
-            else if (robots[0].getBoundingRectangle().contains(touchCoords) && spawnTimer>=1.5f) {
-                //Do nothing
-            }
-            else score.setScore(0);
 
+            else score.setScore(0);
     }
 
     private void createCamera(){
