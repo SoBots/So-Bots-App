@@ -13,7 +13,7 @@ import java.util.Random;
 
 //-- Runs the game. --//
 
-public class Game extends ApplicationAdapter {
+public class MainGame extends ApplicationAdapter {
 
     private Random random;
     private OrthographicCamera camera;
