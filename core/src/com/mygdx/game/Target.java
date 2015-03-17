@@ -20,6 +20,7 @@ import com.badlogic.gdx.math.Vector3;
     private Sprite tSprite;
 
     private float stateTime;
+    private float animT;
 
     private Camera camera;
     private Batch batch;
@@ -63,15 +64,19 @@ import com.badlogic.gdx.math.Vector3;
         Texture tTexture = new Texture(Gdx.files.internal(texture));
         int FRAME_COLS = 2;
         int FRAME_ROWS = 1;
+        float frameT = (float) 0.0125;
         TextureRegion[][] textureRegions = TextureRegion.split(tTexture, tTexture.getWidth()/FRAME_COLS, tTexture.getHeight()/FRAME_ROWS);
         tFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
         int index = 0;
         for(int i = 0; i < FRAME_ROWS; i++)
             for(int j = 0; j < FRAME_COLS; j++)
                 tFrames[index++] = textureRegions[i][j];
-        tAnimation = new Animation(0.0125f, tFrames);
+        tAnimation = new Animation(frameT, tFrames);
         tSprite = new Sprite(tFrames[0]);
+        animT = frameT * (FRAME_COLS * FRAME_ROWS);
     }
+
+    public float getAnimT() {return animT;}
 
     //Plays the created animation.
     private void playAnim(){

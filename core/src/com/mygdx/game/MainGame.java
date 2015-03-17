@@ -30,8 +30,10 @@ public class MainGame implements Screen {
     private float stateTime, spawnTimer;
     private Target[] robots;
     private Score score;
+    private float spawnT;
 
     private boolean robotSet;
+    private boolean hit;
 
 	public MainGame(SoBots game) {
         this.game = game;
@@ -42,6 +44,8 @@ public class MainGame implements Screen {
         score = new Score(camera, game.batch, new Vector2(game.scrWidth, game.scrHeight));
         touch = new Touch(this, camera);
         Gdx.input.setInputProcessor(touch);
+        spawnTimer = 3;
+        hit = true;
 	}
 
 	@Override
@@ -53,12 +57,14 @@ public class MainGame implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 		game.batch.begin();
-
-        spawnTimer += Gdx.graphics.getDeltaTime();
+        int currentScore = score.getScore();
+        spawnT = Difficulty.getTime(currentScore);
+        spawnTimer +=  Gdx.graphics.getDeltaTime();
 
         //If 2 seconds elapsed since last drawing, re-draw robots
-        if(spawnTimer > 1.75f) {
-            int currentScore = score.getScore();
+        if(spawnTimer > spawnT && hit) {
+            hit = false;
+            //int currentScore = score.getScore();
             int level = Difficulty.getDifficulty(currentScore);
             robots = new Target[level];
 
@@ -69,9 +75,10 @@ public class MainGame implements Screen {
             robots[0] = new Target("red-bot-sprite.png", camera, game.batch, robotLoc[0]);
             for ( int i=1; i<robots.length; i++)
                 robots[i] = new Target("blue-bot.png", camera, game.batch, robotLoc[i]);
-            spawnTimer = 0f;
             robotSet = true;
+            spawnTimer = 0f;
         }
+        else if (spawnTimer > spawnT && !hit) endGame();
 
         stateTime += Gdx.graphics.getDeltaTime();
 
@@ -87,21 +94,24 @@ public class MainGame implements Screen {
     public void setCos(Vector2 coords){
         touchCoords = coords;
         Gdx.app.log("expl", "Co-ords - " + touchCoords);
-
         if(robotSet)
             if (robots[0].getBoundingRectangle().contains(touchCoords)) {
-                if(spawnTimer<1.5f) {
+                //if(spawnTimer < spawnT) {
                     Gdx.app.log("expl", "You hit the robot!");
                     score.updateScore(1);
                     robots[0].targetTouched();
-                    spawnTimer = 1.5f;
-                }
+                    spawnTimer = spawnT-0.25f;
+                    hit =true;
+                //}
             }
-
             else {
-                game.setScreen(new MainMenu(game));
-                dispose();
+                endGame();
             }
+    }
+
+    public void endGame() {
+        game.setScreen(new MainMenu(game));
+        dispose();
     }
 
     private void createCamera(){
